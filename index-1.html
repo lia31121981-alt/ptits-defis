@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mes p'tits défis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F6FB; --card:#FFFFFF; --ink:#1D2340; --muted:#5D6585; --border:#D9DFEC;
+  --fr:#0F7C66; --fr-soft:#DDF3EC; --mx:#3B2F91; --mx-soft:#E7E4FA;
+  --good:#1E9E5A; --good-bg:#DFF5E8; --bad:#D9483B; --bad-bg:#FCE5E2; --star:#F4B400;
+  --space:#161A40;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11152A; --card:#1B2140; --ink:#EEF1FB; --muted:#A3AACB; --border:#2C3460;
+  --fr:#3CC5A3; --fr-soft:#173A33; --mx:#9D92F5; --mx-soft:#2A2655;
+  --good:#45CF85; --good-bg:#173A2A; --bad:#F2766B; --bad-bg:#43211F; --space:#0B0E26;}}
+:root[data-theme="dark"]{--bg:#11152A; --card:#1B2140; --ink:#EEF1FB; --muted:#A3AACB; --border:#2C3460;
+  --fr:#3CC5A3; --fr-soft:#173A33; --mx:#9D92F5; --mx-soft:#2A2655;
+  --good:#45CF85; --good-bg:#173A2A; --bad:#F2766B; --bad-bg:#43211F; --space:#0B0E26;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 19px/1.5 Andika,"Comic Neue",Verdana,sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:600px;margin:0 auto;padding:16px 16px 40px}
+h1,h2,h3{font-family:Fredoka,Andika,Verdana,sans-serif;font-weight:700;line-height:1.15;margin:0}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:4px solid var(--star);outline-offset:2px}
+.hidden{display:none!important}
+
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;min-height:44px}
+.back{background:none;border:0;padding:8px 0;font-weight:700;color:var(--muted);font-size:18px}
+.stars-total{font-family:Fredoka,sans-serif;font-weight:700;font-size:20px}
+.stars-total span{color:var(--star)}
+
+/* Accueil : deux grandes portes */
+.hello{font-size:34px;margin:6px 0 4px}
+.sub{color:var(--muted);margin:0 0 18px}
+.door{display:block;width:100%;text-align:left;border:0;border-radius:22px;padding:22px 20px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden}
+.door h2{font-size:30px}
+.door p{margin:4px 0 0;opacity:.92;font-size:17px}
+.door .big{position:absolute;right:16px;bottom:6px;font:700 64px/1 Fredoka,sans-serif;opacity:.25}
+.door.fr{background:var(--fr)} .door.mx{background:var(--mx)}
+
+/* Listes d'activités */
+.act{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:2px solid var(--border);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.act .ico{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font:700 22px/1 Fredoka,sans-serif}
+.fr-ico{background:var(--fr-soft);color:var(--fr)} .mx-ico{background:var(--mx-soft);color:var(--mx)}
+.act b{display:block;font-size:20px;line-height:1.2}
+.act small{color:var(--muted);font-size:15px}
+.act .got{margin-left:auto;flex:none;color:var(--star);font-size:20px;letter-spacing:1px}
+.section-t{font-size:24px;margin:22px 0 10px}
+
+/* Quiz de français */
+.panel{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:20px 18px}
+.dots{display:flex;gap:6px;margin-bottom:14px}
+.dots i{flex:1;height:8px;border-radius:4px;background:var(--border)}
+.dots i.ok{background:var(--good)} .dots i.ko{background:var(--bad)} .dots i.now{background:var(--fr)}
+.consigne{color:var(--muted);font-size:17px;margin:0 0 10px}
+.phrase{font-size:25px;line-height:1.5;margin:0 0 18px;font-weight:700}
+.choices{display:grid;gap:10px}
+.choice{border:2.5px solid var(--border);background:var(--card);border-radius:16px;padding:14px;font-size:20px;font-weight:700;text-align:center}
+.choice.good{border-color:var(--good);background:var(--good-bg)}
+.choice.bad{border-color:var(--bad);background:var(--bad-bg)}
+.words{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.word{border:2.5px solid var(--border);background:var(--card);border-radius:12px;padding:8px 12px;font-size:22px;font-weight:700}
+.word.sel{border-color:var(--fr);background:var(--fr-soft)}
+.word.good{border-color:var(--good);background:var(--good-bg)}
+.word.bad{border-color:var(--bad);background:var(--bad-bg)}
+.word.miss{border-style:dashed;border-color:var(--good)}
+.punct{font-size:22px;font-weight:700;align-self:center}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font-size:21px;font-weight:700;color:#fff;margin-top:14px}
+.btn.fr-b{background:var(--fr)} .btn.mx-b{background:var(--mx)}
+.btn.ghost{background:transparent;color:var(--ink);border:2.5px solid var(--border)}
+.feedback{margin-top:16px;border-radius:16px;padding:14px 16px;font-size:18px}
+.feedback.good{background:var(--good-bg)} .feedback.bad{background:var(--bad-bg)}
+.feedback b{display:block;font-family:Fredoka,sans-serif;font-size:22px;margin-bottom:2px}
+
+/* Fin de série */
+.end{text-align:center}
+.end .stars{font-size:62px;letter-spacing:6px;margin:8px 0;color:var(--star)}
+.end .stars .off{color:var(--border)}
+.end h2{font-size:32px}
+.end p{color:var(--muted)}
+
+/* Tables : choix */
+.tables{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tbl{border:0;border-radius:18px;padding:14px 4px;background:var(--mx-soft);color:var(--mx);font:700 30px/1 Fredoka,sans-serif}
+.tbl small{display:block;font:400 14px/1.3 Andika,sans-serif;color:var(--muted);margin-top:6px;min-height:18px}
+.tbl.all{grid-column:1/-1;background:var(--mx);color:#fff;font-size:24px}
+.tbl.all small{color:#E3DFFF}
+.modes{display:flex;gap:10px;margin-bottom:16px}
+.mode{flex:1;border:2.5px solid var(--border);background:var(--card);border-radius:14px;padding:12px;font-weight:700;font-size:18px}
+.mode.on{border-color:var(--mx);background:var(--mx-soft);color:var(--mx)}
+
+/* Apprendre la table */
+.learn{display:grid;gap:8px}
+.lrow{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:2px solid var(--border);border-radius:14px;padding:10px 16px;font:700 24px/1.2 Fredoka,sans-serif}
+.lrow button{min-width:84px;border:0;border-radius:10px;padding:8px 10px;background:var(--mx-soft);color:var(--mx);font:700 24px/1 Fredoka,sans-serif}
+
+/* Jeu : la fusée */
+.game{background:var(--space);border-radius:24px;padding:16px;color:#fff;position:relative;overflow:hidden;
+  background-image:radial-gradient(1.5px 1.5px at 20% 30%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 70% 15%,#fff 50%,transparent 51%),
+  radial-gradient(1.5px 1.5px at 85% 60%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 40% 80%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 10% 65%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 55% 45%,#fff 50%,transparent 51%)}
+.hud{display:flex;justify-content:space-between;align-items:center;font:700 22px/1 Fredoka,sans-serif}
+.timebar{height:10px;background:rgba(255,255,255,.18);border-radius:5px;margin:12px 0 4px;overflow:hidden}
+.timebar div{height:100%;background:var(--star);width:100%;transition:width 1s linear}
+.stage{display:flex;gap:12px;align-items:stretch;margin-top:10px}
+.track{flex:none;width:46px;height:190px;border-radius:23px;background:rgba(255,255,255,.1);position:relative}
+.rocket{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);font-size:32px;transition:bottom .35s ease-out}
+.moon{position:absolute;top:2px;left:50%;transform:translateX(-50%);font-size:26px}
+.qzone{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.calc{font:700 46px/1.1 Fredoka,sans-serif}
+.typed{font:700 46px/1.1 Fredoka,sans-serif;min-height:56px;color:var(--star)}
+.flash{min-height:26px;font-size:18px;font-weight:700}
+.flash.good{color:#7EF0B0} .flash.bad{color:#FFB3AA}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.key{border:0;border-radius:14px;padding:14px 0;background:rgba(255,255,255,.14);color:#fff;font:700 28px/1 Fredoka,sans-serif}
+.key:active{background:rgba(255,255,255,.3)}
+.key.ok{background:var(--good)}
+.key.del{background:rgba(255,255,255,.08)}
+@media (prefers-reduced-motion:reduce){.rocket,.timebar div{transition:none}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- ACCUEIL -->
+<section id="home">
+  <div class="top"><span></span><span class="stars-total">⭐ <span class="starCount">0</span></span></div>
+  <h1 class="hello">Mes p'tits défis</h1>
+  <p class="sub">Choisis ton activité et gagne des étoiles.</p>
+  <button class="door fr" id="goFr"><h2>Français</h2><p>Les phrases, le nom et le groupe nominal</p><span class="big">Aa</span></button>
+  <button class="door mx" id="goMx"><h2>Les tables</h2><p>Apprends et joue avec la fusée</p><span class="big">×</span></button>
+</section>
+
+<!-- MENU FRANÇAIS -->
+<section id="frMenu" class="hidden">
+  <div class="top"><button class="back" data-home>‹ Accueil</button><span class="stars-total">⭐ <span class="starCount">0</span></span></div>
+  <h2 class="section-t" style="margin-top:0">Français</h2>
+  <div id="frList"></div>
+</section>
+
+<!-- QUIZ FRANÇAIS -->
+<section id="frQuiz" class="hidden">
+  <div class="top"><button class="back" id="frQuit">‹ Arrêter</button><span id="frTitle" style="font-weight:700;color:var(--fr)"></span></div>
+  <div class="panel">
+    <div class="dots" id="dots"></div>
+    <p class="consigne" id="consigne"></p>
+    <div id="frBody"></div>
+    <div id="frFeedback"></div>
+    <button class="btn fr-b hidden" id="frNext">Suivant</button>
+  </div>
+</section>
+
+<!-- MENU TABLES -->
+<section id="mxMenu" class="hidden">
+  <div class="top"><button class="back" data-home>‹ Accueil</button><span class="stars-total">⭐ <span class="starCount">0</span></span></div>
+  <h2 class="section-t" style="margin-top:0">Les tables de multiplication</h2>
+  <div class="modes">
+    <button class="mode on" data-mode="play">Jouer</button>
+    <button class="mode" data-mode="learn">Apprendre</button>
+  </div>
+  <div class="tables" id="tblGrid"></div>
+</section>
+
+<!-- APPRENDRE -->
+<section id="mxLearn" class="hidden">
+  <div class="top"><button class="back" id="learnBack">‹ Les tables</button></div>
+  <h2 class="section-t" style="margin-top:0" id="learnTitle"></h2>
+  <p class="sub">Dis la réponse dans ta tête, puis touche pour vérifier.</p>
+  <div class="learn" id="learnList"></div>
+  <button class="btn mx-b" id="learnPlay">Je joue avec cette table</button>
+</section>
+
+<!-- JEU -->
+<section id="mxGame" class="hidden">
+  <div class="top"><button class="back" id="gameQuit">‹ Arrêter</button></div>
+  <div class="game">
+    <div class="hud"><span id="gScore">0</span><span id="gTable"></span><span id="gTime">60 s</span></div>
+    <div class="timebar"><div id="gBar"></div></div>
+    <div class="stage">
+      <div class="track"><span class="moon">🌙</span><span class="rocket" id="rocket">🚀</span></div>
+      <div class="qzone">
+        <div class="calc" id="gCalc"></div>
+        <div class="typed" id="gTyped"></div>
+        <div class="flash" id="gFlash"></div>
+      </div>
+    </div>
+    <div class="pad" id="pad"></div>
+  </div>
+</section>
+
+<!-- FIN (commune) -->
+<section id="endScreen" class="hidden">
+  <div class="panel end">
+    <div class="stars" id="endStars"></div>
+    <h2 id="endTitle"></h2>
+    <p id="endText"></p>
+    <button class="btn" id="endAgain">Rejouer</button>
+    <button class="btn ghost" id="endMenu">Retour</button>
+  </div>
+</section>
+
+</main>
+<script>
+/* ===================== DONNÉES DE FRANÇAIS ===================== */
+const TYPES = {
+  dec:{nom:"Déclarative", aide:"Elle donne une information. Elle se termine par un point."},
+  int:{nom:"Interrogative", aide:"Elle pose une question. Elle se termine par un point d'interrogation (?)."},
+  exc:{nom:"Exclamative", aide:"Elle exprime une émotion : joie, surprise, colère… Elle se termine par un point d'exclamation (!)."},
+  imp:{nom:"Impérative", aide:"Elle donne un ordre ou un conseil. Le verbe est à l'impératif, sans sujet."}
+};
+const PH_TYPES = [
+  ["Le chat dort sur le canapé.","dec"],["Où as-tu rangé ton cartable ?","int"],["Quelle belle journée !","exc"],
+  ["Range ta chambre.","imp"],["Est-ce que tu viens au parc ?","int"],["Ferme la porte, s'il te plaît.","imp"],
+  ["Comme ce gâteau est bon !","exc"],["Nous partons en vacances demain.","dec"],["Pourquoi le ciel est-il bleu ?","int"],
+  ["Ne cours pas dans le couloir.","imp"],["Quel froid il fait ce matin !","exc"],["Ma sœur joue du piano.","dec"],
+  ["Écoute bien la maîtresse.","imp"],["Tu as faim ?","int"],["Que ce dessin est joli !","exc"],["Les oiseaux construisent leur nid.","dec"]
+];
+const PH_FORMES = [
+  ["Je n'aime pas les épinards.",false],["Paul mange une pomme.",true],["Il ne pleut plus.",false],
+  ["Nous ne sommes jamais allés à la mer.",false],["Tu as fini tes devoirs.",true],["Ne touche pas au four.",false],
+  ["Elle ne voit rien dans le noir.",false],["Le bus arrive à huit heures.",true],["Mon frère adore le football.",true],
+  ["Les enfants chantent une chanson.",true],["Je ne mange jamais de bonbons le soir.",false],["Le soleil brille.",true]
+];
+/* Les noms sont entre étoiles */
+const PH_NOMS = [
+  "Le *chat* mange une *souris* dans le *jardin* .",
+  "Ma *maman* prépare une *tarte* aux *pommes* .",
+  "Les *enfants* jouent au *ballon* dans la *cour* .",
+  "*Lucas* lit un *livre* sur les *dinosaures* .",
+  "Le petit *chien* court vers sa *niche* .",
+  "Une *tempête* a cassé la *branche* du *cerisier* .",
+  "*Paris* est une grande *ville* .",
+  "Mon *grand-père* plante des *tomates* .",
+  "La *maîtresse* écrit une *phrase* au *tableau* .",
+  "*Emma* range ses *crayons* dans sa *trousse* ."
+];
+/* Groupes nominaux : D = déterminant, A = adjectif, N = nom */
+const GNS = [
+  "le/D petit/A chat/N noir/A", "une/D grande/A maison/N", "mon/D vélo/N rouge/A", "ces/D jolies/A fleurs/N",
+  "la/D voiture/N bleue/A", "un/D gros/A gâteau/N", "leur/D chien/N", "des/D chaussures/N neuves/A",
+  "cette/D vieille/A horloge/N", "notre/D gentille/A maîtresse/N", "le/D ciel/N gris/A", "sa/D nouvelle/A trousse/N"
+];
+const ROLES = {
+  N:{q:"Touche le nom (le mot principal du groupe).", nom:"le nom", aide:"Le nom est le mot principal du groupe nominal. On peut mettre un déterminant devant : un chat, une maison."},
+  D:{q:"Touche le déterminant.", nom:"le déterminant", aide:"Le déterminant est le petit mot placé avant le nom : le, la, les, un, une, des, mon, ce, ces…"},
+  A:{q:"Touche un adjectif.", nom:"un adjectif", aide:"L'adjectif donne une précision sur le nom : sa couleur, sa taille, sa forme…"}
+};
+
+const FR_ACTS = [
+  {id:"types", ico:"?!", nom:"Les types de phrases", desc:"Déclarative, interrogative, exclamative, impérative"},
+  {id:"formes", ico:"ne", nom:"Affirmative ou négative ?", desc:"Repère la forme de la phrase"},
+  {id:"noms", ico:"N", nom:"Trouve les noms", desc:"Touche tous les noms de la phrase"},
+  {id:"gn", ico:"GN", nom:"Le groupe nominal", desc:"Déterminant, nom et adjectif"}
+];
+
+/* ===================== OUTILS ===================== */
+const $ = id => document.getElementById(id);
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const SCREENS = ["home","frMenu","frQuiz","mxMenu","mxLearn","mxGame","endScreen"];
+function show(id){ SCREENS.forEach(s=>$(s).classList.toggle("hidden",s!==id)); window.scrollTo(0,0); refreshStars(); }
+const BRAVO = ["Bravo !","Super !","Génial !","Excellent !","Parfait !","Bien joué !"];
+
+/* Sauvegarde : meilleures étoiles par activité (sur le téléphone seulement) */
+const KEY="ptits-defis-v1";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+function save(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+function setBest(id,stars,extra){ const d=load(); d[id]=d[id]||{s:0}; if(stars>d[id].s) d[id].s=stars; if(extra!=null && (d[id].best==null||extra>d[id].best)) d[id].best=extra; save(d); }
+function refreshStars(){ const d=load(); const t=Object.values(d).reduce((s,x)=>s+(x.s||0),0); document.querySelectorAll(".starCount").forEach(e=>e.textContent=t); }
+const starStr = n => "★".repeat(n)+"☆".repeat(3-n);
+
+/* ===================== FRANÇAIS ===================== */
+function renderFrMenu(){
+  const d=load();
+  $("frList").innerHTML = FR_ACTS.map(a=>`<button class="act" data-act="${a.id}"><span class="ico fr-ico">${a.ico}</span>
+    <span><b>${a.nom}</b><small>${a.desc}</small></span><span class="got">${starStr(d["fr-"+a.id]?d["fr-"+a.id].s:0)}</span></button>`).join("");
+  document.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>startFr(b.dataset.act));
+  show("frMenu");
+}
+
+let F=null;
+function buildQuestions(act){
+  if(act==="types") return shuffle(PH_TYPES).slice(0,8).map(([p,t])=>({kind:"choice", consigne:"Quel est le type de cette phrase ?", phrase:p,
+    options:["dec","int","exc","imp"].map(k=>({k,label:TYPES[k].nom})), ans:t, aide:k=>TYPES[k].aide}));
+  if(act==="formes") return shuffle(PH_FORMES).slice(0,8).map(([p,aff])=>({kind:"choice", consigne:"Cette phrase est-elle affirmative ou négative ?", phrase:p,
+    options:[{k:"aff",label:"Affirmative"},{k:"neg",label:"Négative"}], ans:aff?"aff":"neg",
+    aide:k=>k==="neg"?"Une phrase négative contient « ne… pas », « ne… plus », « ne… jamais » ou « ne… rien ».":"Une phrase affirmative ne contient pas de négation (ne… pas, ne… plus…)."}));
+  if(act==="noms") return shuffle(PH_NOMS).slice(0,6).map(s=>({kind:"noms", consigne:"Touche tous les noms de la phrase, puis appuie sur « Vérifier ».",
+    tokens:s.split(" ").map(w=>({w:w.replace(/\*/g,""), n:w.startsWith("*")}))}));
+  return shuffle(GNS).slice(0,8).map(g=>{
+    const toks=g.split(" ").map(t=>{ const [w,r]=t.split("/"); return {w,r}; });
+    const roles=[...new Set(toks.map(t=>t.r))];
+    const role = Math.random()<0.5 ? "N" : pick(roles);
+    return {kind:"gn", consigne:ROLES[role].q, role, tokens:toks};
+  });
+}
+
+function startFr(act){
+  F={act, qs:buildQuestions(act), i:0, ok:0, res:[]};
+  $("frTitle").textContent=FR_ACTS.find(a=>a.id===act).nom;
+  renderFr(); show("frQuiz");
+}
+
+function renderDots(){ $("dots").innerHTML=F.qs.map((_,i)=>`<i class="${F.res[i]===true?"ok":F.res[i]===false?"ko":i===F.i?"now":""}"></i>`).join(""); }
+
+function renderFr(){
+  const q=F.qs[F.i];
+  renderDots();
+  $("consigne").textContent=q.consigne;
+  $("frFeedback").innerHTML=""; $("frNext").classList.add("hidden");
+  if(q.kind==="choice"){
+    $("frBody").innerHTML=`<p class="phrase">${q.phrase}</p><div class="choices">`+
+      q.options.map(o=>`<button class="choice" data-k="${o.k}">${o.label}</button>`).join("")+`</div>`;
+    document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>answerChoice(b.dataset.k));
+  } else if(q.kind==="noms"){
+    $("frBody").innerHTML=`<div class="words">`+q.tokens.map((t,i)=>/^[.!?,]$/.test(t.w)
+      ? `<span class="punct">${t.w}</span>` : `<button class="word" data-i="${i}">${t.w}</button>`).join("")+
+      `</div><button class="btn fr-b" id="verif">Vérifier</button>`;
+    document.querySelectorAll(".word").forEach(b=>b.onclick=()=>{ if(!q.done) b.classList.toggle("sel"); });
+    $("verif").onclick=answerNoms;
+  } else {
+    $("frBody").innerHTML=`<div class="words">`+q.tokens.map((t,i)=>`<button class="word" data-i="${i}">${t.w}</button>`).join("")+`</div>`;
+    document.querySelectorAll(".word").forEach(b=>b.onclick=()=>answerGn(+b.dataset.i));
+  }
+}
+
+function feedback(good,html){
+  F.res[F.i]=good; if(good) F.ok++;
+  F.qs[F.i].done=true;
+  $("frFeedback").innerHTML=`<div class="feedback ${good?"good":"bad"}"><b>${good?pick(BRAVO):"Presque !"}</b>${html}</div>`;
+  $("frNext").textContent = F.i===F.qs.length-1 ? "Voir mes étoiles" : "Suivant";
+  $("frNext").classList.remove("hidden");
+  renderDots();
+}
+
+function answerChoice(k){
+  const q=F.qs[F.i]; if(q.done) return;
+  document.querySelectorAll(".choice").forEach(b=>{ b.disabled=true; if(b.dataset.k===q.ans) b.classList.add("good"); else if(b.dataset.k===k) b.classList.add("bad"); });
+  feedback(k===q.ans, q.aide(q.ans));
+}
+
+function answerNoms(){
+  const q=F.qs[F.i]; if(q.done) return;
+  let good=true;
+  document.querySelectorAll(".word").forEach(b=>{
+    const t=q.tokens[+b.dataset.i], sel=b.classList.contains("sel");
+    b.classList.remove("sel"); b.disabled=true;
+    if(t.n && sel) b.classList.add("good");
+    else if(t.n && !sel){ b.classList.add("miss"); good=false; }
+    else if(!t.n && sel){ b.classList.add("bad"); good=false; }
+  });
+  $("verif").classList.add("hidden");
+  const noms=q.tokens.filter(t=>t.n).map(t=>t.w);
+  feedback(good, `Les noms sont : <b style="display:inline;font-size:inherit">${noms.join(", ")}</b>. Un nom désigne une personne, un animal, une chose ou un lieu. Les prénoms et les noms de villes sont des noms propres.`);
+}
+
+function answerGn(i){
+  const q=F.qs[F.i]; if(q.done) return;
+  const good = q.tokens[i].r===q.role;
+  document.querySelectorAll(".word").forEach(b=>{ b.disabled=true; const t=q.tokens[+b.dataset.i];
+    if(t.r===q.role) b.classList.add("good"); else if(+b.dataset.i===i) b.classList.add("bad"); });
+  feedback(good, ROLES[q.role].aide);
+}
+
+$("frNext").onclick=()=>{ if(F.i<F.qs.length-1){ F.i++; renderFr(); } else endFr(); };
+$("frQuit").onclick=renderFrMenu;
+
+function endFr(){
+  const r=F.ok/F.qs.length, s = r===1?3 : r>=0.75?2 : r>=0.5?1 : 0;
+  setBest("fr-"+F.act,s);
+  showEnd(s, s===3?"Sans faute !":s>0?"Bien joué !":"Continue, tu progresses !",
+    `${F.ok} bonne${F.ok>1?"s":""} réponse${F.ok>1?"s":""} sur ${F.qs.length}.`,
+    "fr-b", ()=>startFr(F.act), renderFrMenu);
+}
+
+/* ===================== TABLES DE MULTIPLICATION ===================== */
+let mxMode="play";
+function renderMxMenu(){
+  const d=load();
+  const cell=t=>{ const k="mx-"+t, b=d[k]; return b?`${starStr(b.s)}`:"" };
+  $("tblGrid").innerHTML = [2,3,4,5,6,7,8,9,10].map(t=>`<button class="tbl" data-t="${t}">×${t}<small>${cell(t)}</small></button>`).join("")+
+    `<button class="tbl all" data-t="all">Toutes les tables<small>${cell("all")}</small></button>`;
+  document.querySelector(".tbl.all").classList.toggle("hidden",mxMode==="learn");
+  document.querySelectorAll(".tbl").forEach(b=>b.onclick=()=>{
+    const t=b.dataset.t==="all"?"all":+b.dataset.t;
+    if(mxMode==="learn" && t!=="all") openLearn(t); else startGame(t);
+  });
+  show("mxMenu");
+}
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{
+  mxMode=b.dataset.mode;
+  document.querySelectorAll(".mode").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelector(".tbl.all").classList.toggle("hidden",mxMode==="learn");
+});
+
+function openLearn(t){
+  $("learnTitle").textContent="La table de "+t;
+  $("learnList").innerHTML=[1,2,3,4,5,6,7,8,9,10].map(n=>`<div class="lrow"><span>${n} × ${t}</span><button data-r="${n*t}">?</button></div>`).join("");
+  document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ b.textContent = b.textContent==="?" ? b.dataset.r : "?"; });
+  $("learnPlay").onclick=()=>startGame(t);
+  show("mxLearn");
+}
+$("learnBack").onclick=renderMxMenu;
+
+/* Le jeu : 60 secondes pour faire monter la fusée jusqu'à la Lune */
+const GOAL=20;
+let M=null, mxTimer=null;
+function newCalc(){
+  let a,b;
+  do{ a = M.t==="all" ? 2+Math.floor(Math.random()*9) : M.t; b = 1+Math.floor(Math.random()*10); }
+  while(M.last && M.last===a+"x"+b);
+  if(Math.random()<.5 && M.t!=="all"){ M.a=b; M.b=a; } else { M.a=a; M.b=b; }
+  M.last=a+"x"+b; M.typed="";
+  $("gCalc").textContent=`${M.a} × ${M.b}`; $("gTyped").textContent="";
+}
+function startGame(t){
+  M={t, score:0, left:60, typed:"", last:null, errors:[]};
+  $("gTable").textContent = t==="all" ? "Toutes" : "Table de "+t;
+  $("gScore").textContent="⭐ 0"; $("gTime").textContent="60 s"; $("gFlash").textContent=""; $("gBar").style.width="100%";
+  $("rocket").style.bottom="4px";
+  $("pad").innerHTML=[1,2,3,4,5,6,7,8,9].map(n=>`<button class="key" data-n="${n}">${n}</button>`).join("")+
+    `<button class="key del" data-n="del">⌫</button><button class="key" data-n="0">0</button><button class="key ok" data-n="ok">OK</button>`;
+  document.querySelectorAll(".key").forEach(k=>k.onclick=()=>press(k.dataset.n));
+  newCalc(); show("mxGame");
+  clearInterval(mxTimer);
+  mxTimer=setInterval(()=>{ M.left--; $("gTime").textContent=M.left+" s"; $("gBar").style.width=(M.left/60*100)+"%"; if(M.left<=0) endGame(); },1000);
+}
+function press(n){
+  if(!M || M.left<=0) return;
+  if(n==="del"){ M.typed=M.typed.slice(0,-1); }
+  else if(n==="ok"){ if(M.typed) check(); return; }
+  else if(M.typed.length<3){ M.typed+=n; }
+  $("gTyped").textContent=M.typed;
+}
+function check(){
+  const r=M.a*M.b, good=+M.typed===r;
+  if(good){
+    M.score++; $("gFlash").className="flash good"; $("gFlash").textContent=pick(BRAVO);
+  } else {
+    M.errors.push(`${M.a} × ${M.b} = ${r}`);
+    $("gFlash").className="flash bad"; $("gFlash").textContent=`${M.a} × ${M.b} = ${r}`;
+  }
+  $("gScore").textContent="⭐ "+M.score;
+  $("rocket").style.bottom = `calc(4px + ${Math.min(M.score/GOAL,1)} * (100% - 44px))`;
+  newCalc();
+}
+function endGame(){
+  clearInterval(mxTimer);
+  const sc=M.score, s = sc>=GOAL?3 : sc>=14?2 : sc>=8?1 : 0;
+  setBest("mx-"+M.t,s,sc);
+  const errs=[...new Set(M.errors)];
+  showEnd(s, sc>=GOAL?"La fusée est sur la Lune !":s>0?"Belle partie !":"Entraîne-toi encore un peu !",
+    `${sc} bonne${sc>1?"s":""} réponse${sc>1?"s":""} en 60 secondes.`+(errs.length?` À revoir : ${errs.slice(0,4).join(" ; ")}.`:""),
+    "mx-b", ()=>startGame(M.t), renderMxMenu);
+}
+$("gameQuit").onclick=()=>{ clearInterval(mxTimer); renderMxMenu(); };
+
+/* Clavier physique (si utilisé sur ordinateur) */
+document.addEventListener("keydown",e=>{
+  if($("mxGame").classList.contains("hidden")) return;
+  if(/^[0-9]$/.test(e.key)) press(e.key); else if(e.key==="Backspace") press("del"); else if(e.key==="Enter") press("ok");
+});
+
+/* ===================== ÉCRAN DE FIN ===================== */
+function showEnd(s,title,text,cls,again,back){
+  $("endStars").innerHTML="★".repeat(s)+`<span class="off">${"★".repeat(3-s)}</span>`;
+  $("endTitle").textContent=title; $("endText").textContent=text;
+  $("endAgain").className="btn "+cls; $("endAgain").onclick=again; $("endMenu").onclick=back;
+  show("endScreen");
+}
+
+/* ===================== NAVIGATION ===================== */
+$("goFr").onclick=renderFrMenu;
+$("goMx").onclick=renderMxMenu;
+document.querySelectorAll("[data-home]").forEach(b=>b.onclick=()=>show("home"));
+show("home");
+</script>
+</body>
+</html>
